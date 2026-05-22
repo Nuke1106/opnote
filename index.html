@@ -66,7 +66,6 @@ body {
   background: rgba(255,255,255,0.15);
   border-radius: 24px;
   padding: 3px;
-  gap: 0;
 }
 .type-btn {
   flex: 1;
@@ -170,25 +169,6 @@ input:focus, select:focus, textarea:focus {
   box-shadow: 0 0 0 3px rgba(10,108,177,0.12);
 }
 textarea { resize: vertical; min-height: 60px; }
-.input-with-unit {
-  display: flex;
-  align-items: center;
-  gap: 0;
-}
-.input-with-unit input {
-  border-radius: 10px 0 0 10px;
-  border-right: none;
-}
-.input-unit {
-  padding: 10px 10px;
-  background: var(--section-head);
-  border: 1.5px solid var(--border);
-  border-left: none;
-  border-radius: 0 10px 10px 0;
-  font-size: 13px;
-  color: var(--muted);
-  white-space: nowrap;
-}
 
 /* ===== PATIENT LIST ===== */
 .patient-grid {
@@ -286,6 +266,8 @@ table td input:focus {
   margin-top: 10px;
   flex-wrap: wrap;
 }
+
+/* ===== BUTTONS ===== */
 .btn {
   padding: 9px 16px;
   border: none;
@@ -298,6 +280,7 @@ table td input:focus {
   align-items: center;
   gap: 6px;
   transition: opacity 0.2s, transform 0.1s;
+  text-decoration: none;
 }
 .btn:active { transform: scale(0.97); }
 .btn-primary { background: var(--primary); color: white; }
@@ -382,6 +365,144 @@ table td input:focus {
   box-shadow: none;
 }
 
+/* ===== PHOTO ATTACHMENT ===== */
+.photo-upload-btns {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+}
+.photo-item {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1.5px solid var(--border);
+  background: #f8f9fa;
+  display: flex;
+  flex-direction: column;
+}
+.photo-item img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  display: block;
+  cursor: pointer;
+}
+.photo-caption {
+  padding: 5px 7px;
+  font-size: 12px;
+  border: none;
+  border-top: 1px solid var(--border);
+  width: 100%;
+  background: white;
+  font-family: inherit;
+  color: var(--text);
+  min-height: 28px;
+}
+.photo-caption:focus {
+  outline: none;
+  background: #f0f6ff;
+}
+.photo-del {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(229,62,62,0.88);
+  color: white;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  line-height: 1;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.photo-del:active { transform: scale(0.92); }
+.photo-num {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  background: rgba(0,0,0,0.55);
+  color: white;
+  border-radius: 5px;
+  padding: 1px 6px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.photo-empty {
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  padding: 28px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.photo-empty-icon { font-size: 36px; opacity: 0.4; }
+.photo-count-badge {
+  background: var(--primary);
+  color: white;
+  border-radius: 20px;
+  padding: 1px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  display: none;
+}
+.photo-count-badge.show { display: inline-block; }
+
+/* Lightbox */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 300;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+.lightbox.show { display: flex; }
+.lightbox img {
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: 10px;
+  object-fit: contain;
+}
+.lightbox-caption {
+  color: rgba(255,255,255,0.85);
+  font-size: 14px;
+  text-align: center;
+  max-width: 400px;
+}
+.lightbox-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: white;
+  font-size: 22px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* ===== BOTTOM ACTION BAR ===== */
 .bottom-bar {
   position: fixed;
@@ -416,14 +537,12 @@ table td input:focus {
   pointer-events: none;
   white-space: nowrap;
 }
-.toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 /* ===== PRINT ===== */
 @media print {
-  .app-header, .bottom-bar, .table-actions, .btn { display: none !important; }
+  .app-header, .bottom-bar, .table-actions, .btn,
+  .photo-del, .lightbox, .photo-upload-btns { display: none !important; }
   body { background: white; padding: 0; }
   .container { padding: 0; max-width: 100%; }
   .card { box-shadow: none; border: 1px solid #ccc; border-radius: 0; margin-bottom: 8px; }
@@ -431,13 +550,9 @@ table td input:focus {
   .table-wrapper { overflow: visible; }
   table { min-width: unset; }
   input, textarea, select { border: none !important; box-shadow: none !important; }
-  .print-title {
-    display: block !important;
-    text-align: center;
-    font-size: 14pt;
-    font-weight: bold;
-    margin-bottom: 8px;
-  }
+  .print-title { display: block !important; text-align: center; font-size: 14pt; font-weight: bold; margin-bottom: 8px; }
+  .photo-grid { grid-template-columns: repeat(3, 1fr); }
+  .photo-caption { border-top: 1px solid #ccc; }
   @page { margin: 15mm; }
 }
 .print-title { display: none; }
@@ -448,6 +563,7 @@ table td input:focus {
   .summary-grid { grid-template-columns: 1fr; }
   .sig-row { flex-direction: column; }
   .field-group.third { flex: 1 1 calc(50% - 5px); }
+  .photo-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
 }
 @media (min-width: 700px) {
   .container { padding: 20px 20px; }
@@ -471,17 +587,20 @@ table td input:focus {
 
 <div class="toast" id="toast"></div>
 
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightboxImg" src="" alt="">
+  <div class="lightbox-caption" id="lightboxCaption"></div>
+</div>
+
 <div class="container">
 
-  <!-- PRINT TITLE -->
   <div class="print-title" id="printTitle">แบบบันทึกผู้ปฏิบัติงานห้องปรับแรงดันบรรยากาศสูง ชนิดหลายตอน — FM-UAM-HBC-01</div>
 
   <!-- SECTION 1: General Info -->
   <div class="card">
-    <div class="section-head" onclick="toggleSection(this)">
-      📋 ข้อมูลทั่วไป
-      <span class="chevron">▼</span>
-    </div>
+    <div class="section-head" onclick="toggleSection(this)">📋 ข้อมูลทั่วไป<span class="chevron">▼</span></div>
     <div class="section-body">
       <div class="field-row">
         <div class="field-group third">
@@ -524,10 +643,7 @@ table td input:focus {
 
   <!-- SECTION 2: Personnel -->
   <div class="card">
-    <div class="section-head" onclick="toggleSection(this)">
-      👨‍⚕️ เจ้าหน้าที่ผู้ปฏิบัติงาน
-      <span class="chevron">▼</span>
-    </div>
+    <div class="section-head" onclick="toggleSection(this)">👨‍⚕️ เจ้าหน้าที่ผู้ปฏิบัติงาน<span class="chevron">▼</span></div>
     <div class="section-body">
       <div class="field-row">
         <div class="field-group half">
@@ -570,29 +686,19 @@ table td input:focus {
 
   <!-- SECTION 3: Patient List -->
   <div class="card">
-    <div class="section-head" onclick="toggleSection(this)">
-      🏥 รายชื่อผู้ป่วย
-      <span class="chevron">▼</span>
-    </div>
+    <div class="section-head" onclick="toggleSection(this)">🏥 รายชื่อผู้ป่วย<span class="chevron">▼</span></div>
     <div class="section-body">
-      <div class="patient-grid" id="patientGrid">
-        <!-- populated by JS -->
-      </div>
+      <div class="patient-grid" id="patientGrid"></div>
     </div>
   </div>
 
   <!-- SECTION 4: Operation Log -->
   <div class="card">
-    <div class="section-head" onclick="toggleSection(this)">
-      📊 บันทึกการปฏิบัติ
-      <span class="chevron">▼</span>
-    </div>
+    <div class="section-head" onclick="toggleSection(this)">📊 บันทึกการปฏิบัติ<span class="chevron">▼</span></div>
     <div class="section-body" style="padding:10px">
       <div class="table-wrapper">
         <table id="logTable">
-          <thead>
-            <tr id="tableHead"></tr>
-          </thead>
+          <thead><tr id="tableHead"></tr></thead>
           <tbody id="tableBody"></tbody>
         </table>
       </div>
@@ -606,46 +712,28 @@ table td input:focus {
 
   <!-- SECTION 5: Summary -->
   <div class="card">
-    <div class="section-head" onclick="toggleSection(this)">
-      ⏱ สรุปเวลา
-      <span class="chevron">▼</span>
-    </div>
+    <div class="section-head" onclick="toggleSection(this)">⏱ สรุปเวลา<span class="chevron">▼</span></div>
     <div class="section-body">
       <div class="summary-grid">
         <div class="summary-item">
           <div class="summary-label">Total time of dive</div>
-          <div class="summary-val">
-            <input type="number" id="s_totalDive" placeholder="0">
-            <span class="summary-unit">mins</span>
-          </div>
+          <div class="summary-val"><input type="number" id="s_totalDive" placeholder="0"><span class="summary-unit">mins</span></div>
         </div>
         <div class="summary-item">
           <div class="summary-label">Bottom time</div>
-          <div class="summary-val">
-            <input type="number" id="s_bottom" placeholder="0">
-            <span class="summary-unit">mins</span>
-          </div>
+          <div class="summary-val"><input type="number" id="s_bottom" placeholder="0"><span class="summary-unit">mins</span></div>
         </div>
         <div class="summary-item">
           <div class="summary-label">Total Patient O2</div>
-          <div class="summary-val">
-            <input type="number" id="s_patientO2" placeholder="0">
-            <span class="summary-unit">mins</span>
-          </div>
+          <div class="summary-val"><input type="number" id="s_patientO2" placeholder="0"><span class="summary-unit">mins</span></div>
         </div>
-        <div class="summary-item" id="s_tenderBox">
+        <div class="summary-item">
           <div class="summary-label" id="s_tenderLabel">Total Tender O2</div>
-          <div class="summary-val">
-            <input type="number" id="s_tender" placeholder="0">
-            <span class="summary-unit">mins</span>
-          </div>
+          <div class="summary-val"><input type="number" id="s_tender" placeholder="0"><span class="summary-unit">mins</span></div>
         </div>
         <div class="summary-item" style="grid-column: 1 / -1">
           <div class="summary-label">เวลารวมทั้งหมด</div>
-          <div class="summary-val">
-            <input type="number" id="s_total" placeholder="0">
-            <span class="summary-unit">mins</span>
-          </div>
+          <div class="summary-val"><input type="number" id="s_total" placeholder="0"><span class="summary-unit">mins</span></div>
         </div>
       </div>
     </div>
@@ -653,21 +741,37 @@ table td input:focus {
 
   <!-- SECTION 6: Remarks -->
   <div class="card">
-    <div class="section-head" onclick="toggleSection(this)">
-      📝 หมายเหตุ / เหตุการณ์พิเศษ
-      <span class="chevron">▼</span>
-    </div>
+    <div class="section-head" onclick="toggleSection(this)">📝 หมายเหตุ / เหตุการณ์พิเศษ<span class="chevron">▼</span></div>
     <div class="section-body">
       <textarea id="remarks" rows="4" placeholder="บันทึกเหตุการณ์พิเศษ อาการผิดปกติ หรือข้อสังเกตอื่นๆ..."></textarea>
     </div>
   </div>
 
-  <!-- SECTION 7: Signatures -->
+  <!-- SECTION 7: Photo Attachment -->
   <div class="card">
     <div class="section-head" onclick="toggleSection(this)">
-      ✍️ ลงนาม
+      📷 รูปภาพแนบ
+      <span class="photo-count-badge" id="photoCountBadge"></span>
       <span class="chevron">▼</span>
     </div>
+    <div class="section-body">
+      <div class="photo-upload-btns">
+        <label class="btn btn-primary" for="cameraInput">📷 ถ่ายรูป</label>
+        <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none" onchange="handlePhotoInput(this)">
+        <label class="btn btn-secondary" for="galleryInput">🖼 เลือกจากคลัง</label>
+        <input type="file" id="galleryInput" accept="image/*" multiple style="display:none" onchange="handlePhotoInput(this)">
+      </div>
+      <div class="photo-grid" id="photoGrid"></div>
+      <div class="photo-empty" id="photoEmpty">
+        <span class="photo-empty-icon">📷</span>
+        ยังไม่มีรูปภาพ — กดถ่ายรูปหรือเลือกจากคลัง
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 8: Signatures -->
+  <div class="card">
+    <div class="section-head" onclick="toggleSection(this)">✍️ ลงนาม<span class="chevron">▼</span></div>
     <div class="section-body">
       <div class="sig-row">
         <div class="sig-box">
@@ -686,7 +790,6 @@ table td input:focus {
 
 </div><!-- end container -->
 
-<!-- Bottom Bar -->
 <div class="bottom-bar">
   <button class="btn btn-secondary" onclick="saveData()">💾 บันทึก</button>
   <button class="btn btn-accent" onclick="window.print()">🖨 พิมพ์</button>
@@ -697,36 +800,35 @@ table td input:focus {
 // ========================
 // STATE
 // ========================
-let chamberType = 'multi'; // 'multi' | 'mono'
+let chamberType = 'multi';
+let photos = []; // [{id, dataUrl, caption}]
 const STORAGE_KEY = 'hbo_op_note';
 
 // ========================
-// COLUMN DEFINITIONS
+// COLUMNS
 // ========================
 const COL_MULTI = [
-  { id:'time',    label:'เวลา',           cls:'col-time',    type:'time' },
-  { id:'elapsed', label:'Elapsed\n(mins)',cls:'col-elapsed', type:'number' },
-  { id:'depth',   label:'Depth\nFSW',    cls:'col-depth',   type:'number' },
-  { id:'o2',      label:'O2\n%',         cls:'col-o2',      type:'number' },
-  { id:'co2',     label:'CO2\nppm',      cls:'col-co2',     type:'number' },
-  { id:'hum',     label:'Humidity\nRH%', cls:'col-hum',     type:'number' },
-  { id:'temp',    label:'Temp\n°C',      cls:'col-temp',    type:'number' },
-  { id:'detail',  label:'รายละเอียดการปฏิบัติ', cls:'col-detail', type:'text' },
-  { id:'tender',  label:'Tender\nO2',    cls:'col-tender',  type:'number' },
-  { id:'patient', label:'Patient\nO2',   cls:'col-patient', type:'number' },
-  { id:'remark',  label:'หมายเหตุ',       cls:'col-remark',  type:'text' },
+  { id:'time',    label:'เวลา',                   cls:'col-time',    type:'time' },
+  { id:'elapsed', label:'Elapsed\n(mins)',         cls:'col-elapsed', type:'number' },
+  { id:'depth',   label:'Depth\nFSW',             cls:'col-depth',   type:'number' },
+  { id:'o2',      label:'O2\n%',                  cls:'col-o2',      type:'number' },
+  { id:'co2',     label:'CO2\nppm',               cls:'col-co2',     type:'number' },
+  { id:'hum',     label:'Humidity\nRH%',          cls:'col-hum',     type:'number' },
+  { id:'temp',    label:'Temp\n°C',               cls:'col-temp',    type:'number' },
+  { id:'detail',  label:'รายละเอียดการปฏิบัติ',  cls:'col-detail',  type:'text' },
+  { id:'tender',  label:'Tender\nO2',             cls:'col-tender',  type:'number' },
+  { id:'patient', label:'Patient\nO2',            cls:'col-patient', type:'number' },
+  { id:'remark',  label:'หมายเหตุ',               cls:'col-remark',  type:'text' },
 ];
-
 const COL_MONO = [
-  { id:'time',    label:'เวลา',           cls:'col-time',    type:'time' },
-  { id:'elapsed', label:'Elapsed\n(mins)',cls:'col-elapsed', type:'number' },
-  { id:'depth',   label:'Depth\nFSW',    cls:'col-depth',   type:'number' },
-  { id:'detail',  label:'รายละเอียดการปฏิบัติ', cls:'col-detail', type:'text' },
-  { id:'air',     label:'Patient\nAir',  cls:'col-air',     type:'number' },
-  { id:'patient', label:'Patient\nO2',   cls:'col-patient', type:'number' },
-  { id:'remark',  label:'หมายเหตุ',       cls:'col-remark',  type:'text' },
+  { id:'time',    label:'เวลา',                   cls:'col-time',    type:'time' },
+  { id:'elapsed', label:'Elapsed\n(mins)',         cls:'col-elapsed', type:'number' },
+  { id:'depth',   label:'Depth\nFSW',             cls:'col-depth',   type:'number' },
+  { id:'detail',  label:'รายละเอียดการปฏิบัติ',  cls:'col-detail',  type:'text' },
+  { id:'air',     label:'Patient\nAir',           cls:'col-air',     type:'number' },
+  { id:'patient', label:'Patient\nO2',            cls:'col-patient', type:'number' },
+  { id:'remark',  label:'หมายเหตุ',               cls:'col-remark',  type:'text' },
 ];
-
 function getCols() { return chamberType === 'multi' ? COL_MULTI : COL_MONO; }
 
 // ========================
@@ -734,27 +836,20 @@ function getCols() { return chamberType === 'multi' ? COL_MULTI : COL_MONO; }
 // ========================
 function setType(type) {
   chamberType = type;
-  document.querySelectorAll('.type-btn').forEach((b,i) => {
-    b.classList.toggle('active', (i===0 && type==='multi') || (i===1 && type==='mono'));
-  });
-  // Badge & print title
-  const badge = type === 'multi' ? 'FM-UAM-HBC-01' : 'FM-UAM-HBC-04';
-  const label = type === 'multi' ? 'ชนิดหลายตอน' : 'ชนิดตอนเดียว';
+  document.querySelectorAll('.type-btn').forEach((b, i) =>
+    b.classList.toggle('active', (i===0&&type==='multi')||(i===1&&type==='mono')));
+  const badge = type==='multi' ? 'FM-UAM-HBC-01' : 'FM-UAM-HBC-04';
+  const label = type==='multi' ? 'ชนิดหลายตอน' : 'ชนิดตอนเดียว';
   document.getElementById('formBadge').textContent = badge;
   document.getElementById('printTitle').textContent =
     `แบบบันทึกผู้ปฏิบัติงานห้องปรับแรงดันบรรยากาศสูง ${label} — ${badge}`;
-  // Personnel fields
-  document.querySelectorAll('.multiplace-field').forEach(el => {
-    el.style.display = type === 'multi' ? '' : 'none';
-  });
-  // Patient grid
+  document.querySelectorAll('.multiplace-field').forEach(el =>
+    el.style.display = type==='multi' ? '' : 'none');
+  document.getElementById('s_tenderLabel').textContent =
+    type==='multi' ? 'Total Tender O2' : 'Total Patient Air';
   renderPatientGrid();
-  // Table
   renderTableHeader();
   clearTable();
-  // Summary tender label
-  document.getElementById('s_tenderLabel').textContent =
-    type === 'multi' ? 'Total Tender O2' : 'Total Patient Air';
 }
 
 // ========================
@@ -762,9 +857,9 @@ function setType(type) {
 // ========================
 function renderPatientGrid() {
   const grid = document.getElementById('patientGrid');
-  const count = chamberType === 'multi' ? 12 : 2;
+  const count = chamberType==='multi' ? 12 : 2;
   grid.innerHTML = '';
-  for (let i = 1; i <= count; i++) {
+  for (let i=1; i<=count; i++) {
     grid.innerHTML += `
       <div class="patient-item">
         <div class="patient-num">${i}</div>
@@ -777,33 +872,26 @@ function renderPatientGrid() {
 // TABLE
 // ========================
 function renderTableHeader() {
-  const head = document.getElementById('tableHead');
-  head.innerHTML = getCols().map(c =>
-    `<th class="${c.cls}">${c.label.replace('\\n','<br>')}</th>`
-  ).join('');
+  document.getElementById('tableHead').innerHTML = getCols()
+    .map(c => `<th class="${c.cls}">${c.label.replace('\\n','<br>')}</th>`).join('');
 }
-
 function addRow(data) {
   const cols = getCols();
-  const body = document.getElementById('tableBody');
   const row = document.createElement('tr');
   row.innerHTML = cols.map(c => {
-    const val = data ? (data[c.id] || '') : '';
+    const val = data ? (data[c.id]||'') : '';
     return `<td class="${c.cls}"><input type="${c.type}" value="${val}" placeholder="${c.type==='text'?'...':''}"></td>`;
   }).join('');
-  body.appendChild(row);
+  document.getElementById('tableBody').appendChild(row);
 }
-
 function removeLastRow() {
-  const body = document.getElementById('tableBody');
-  if (body.lastChild) body.removeChild(body.lastChild);
+  const b = document.getElementById('tableBody');
+  if (b.lastChild) b.removeChild(b.lastChild);
 }
-
 function clearTable() {
   document.getElementById('tableBody').innerHTML = '';
-  // Add initial rows
-  const n = chamberType === 'multi' ? 12 : 8;
-  for (let i = 0; i < n; i++) addRow();
+  const n = chamberType==='multi' ? 12 : 8;
+  for (let i=0; i<n; i++) addRow();
 }
 
 // ========================
@@ -811,9 +899,108 @@ function clearTable() {
 // ========================
 function toggleSection(head) {
   const body = head.nextElementSibling;
-  const isHidden = body.classList.contains('hidden');
-  body.classList.toggle('hidden', !isHidden);
-  head.classList.toggle('collapsed', !isHidden);
+  const hidden = body.classList.contains('hidden');
+  body.classList.toggle('hidden', !hidden);
+  head.classList.toggle('collapsed', !hidden);
+}
+
+// ========================
+// PHOTO MANAGEMENT
+// ========================
+function handlePhotoInput(input) {
+  const files = Array.from(input.files);
+  if (!files.length) return;
+  showToast('⏳ กำลังประมวลผลรูป...');
+  Promise.all(files.map(compressImage)).then(results => {
+    results.forEach(dataUrl => {
+      photos.push({ id: Date.now() + '_' + Math.random().toString(36).slice(2), dataUrl, caption: '' });
+    });
+    renderPhotos();
+    saveData();
+    showToast(`📷 เพิ่มรูป ${results.length} รูป`);
+  });
+  input.value = '';
+}
+
+function compressImage(file) {
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const MAX = 1400;
+        let w = img.width, h = img.height;
+        if (w > MAX || h > MAX) {
+          if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+          else { w = Math.round(w * MAX / h); h = MAX; }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', 0.78));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderPhotos() {
+  const grid = document.getElementById('photoGrid');
+  const empty = document.getElementById('photoEmpty');
+  const badge = document.getElementById('photoCountBadge');
+  grid.innerHTML = '';
+  if (photos.length === 0) {
+    empty.style.display = '';
+    badge.classList.remove('show');
+    return;
+  }
+  empty.style.display = 'none';
+  badge.textContent = photos.length;
+  badge.classList.add('show');
+  photos.forEach((p, idx) => {
+    const div = document.createElement('div');
+    div.className = 'photo-item';
+    div.innerHTML = `
+      <img src="${p.dataUrl}" alt="รูปที่ ${idx+1}" loading="lazy"
+           onclick="openLightbox('${p.id}')" title="คลิกเพื่อขยาย">
+      <span class="photo-num">${idx+1}</span>
+      <button class="photo-del" onclick="deletePhoto('${p.id}')" title="ลบรูป">✕</button>
+      <input class="photo-caption" type="text" value="${escHtml(p.caption)}"
+             placeholder="คำบรรยาย..."
+             oninput="updateCaption('${p.id}', this.value)">`;
+    grid.appendChild(div);
+  });
+}
+
+function deletePhoto(id) {
+  photos = photos.filter(p => p.id !== id);
+  renderPhotos();
+  saveData();
+  showToast('🗑 ลบรูปแล้ว');
+}
+
+function updateCaption(id, val) {
+  const p = photos.find(p => p.id === id);
+  if (p) p.caption = val;
+  clearTimeout(window._saveTimer);
+  window._saveTimer = setTimeout(saveData, 1500);
+}
+
+function openLightbox(id) {
+  const p = photos.find(p => p.id === id);
+  if (!p) return;
+  document.getElementById('lightboxImg').src = p.dataUrl;
+  document.getElementById('lightboxCaption').textContent = p.caption || '';
+  document.getElementById('lightbox').classList.add('show');
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('show');
+}
+
+function escHtml(s) {
+  return String(s).replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 // ========================
@@ -824,14 +1011,12 @@ function collectData() {
   const rows = [];
   document.querySelectorAll('#tableBody tr').forEach(tr => {
     const row = {};
-    tr.querySelectorAll('td input').forEach((inp, i) => {
-      row[cols[i].id] = inp.value;
-    });
+    tr.querySelectorAll('td input').forEach((inp, i) => { row[cols[i].id] = inp.value; });
     rows.push(row);
   });
   const patients = {};
-  const count = chamberType === 'multi' ? 12 : 2;
-  for (let i = 1; i <= count; i++) {
+  const count = chamberType==='multi' ? 12 : 2;
+  for (let i=1; i<=count; i++) {
     const el = document.getElementById(`patient_${i}`);
     if (el) patients[i] = el.value;
   }
@@ -842,28 +1027,26 @@ function collectData() {
     p_doctor: v('p_doctor'), p_divectr: v('p_divectr'),
     p_nurse1: v('p_nurse1'), p_nurse2: v('p_nurse2'),
     p_operator: v('p_operator'), p_comm: v('p_comm'), p_tech: v('p_tech'),
-    patients,
-    rows,
+    patients, rows,
     s_totalDive: v('s_totalDive'), s_bottom: v('s_bottom'),
     s_patientO2: v('s_patientO2'), s_tender: v('s_tender'), s_total: v('s_total'),
     remarks: v('remarks'),
     sig_operator: v('sig_operator'), sig_nurse: v('sig_nurse'),
+    photos: photos.map(p => ({ id: p.id, dataUrl: p.dataUrl, caption: p.caption })),
   };
 }
 
-function v(id) {
-  const el = document.getElementById(id);
-  return el ? el.value : '';
-}
-function sv(id, val) {
-  const el = document.getElementById(id);
-  if (el) el.value = val || '';
-}
+function v(id) { const el = document.getElementById(id); return el ? el.value : ''; }
+function sv(id, val) { const el = document.getElementById(id); if (el) el.value = val||''; }
 
 function saveData() {
   const data = collectData();
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  showToast('💾 บันทึกสำเร็จ');
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    showToast('💾 บันทึกสำเร็จ');
+  } catch(e) {
+    showToast('⚠️ พื้นที่จัดเก็บเต็ม — ลบรูปบางรูปก่อน');
+  }
 }
 
 function loadData() {
@@ -872,29 +1055,28 @@ function loadData() {
   try {
     const data = JSON.parse(raw);
     if (data.type) setType(data.type);
-    sv('diveNo', data.diveNo); sv('diveDate', data.diveDate);
-    sv('treatmentTable', data.treatmentTable); sv('pressure', data.pressure);
-    sv('bottomMinutes', data.bottomMinutes);
-    sv('p_doctor', data.p_doctor); sv('p_divectr', data.p_divectr);
-    sv('p_nurse1', data.p_nurse1); sv('p_nurse2', data.p_nurse2);
-    sv('p_operator', data.p_operator); sv('p_comm', data.p_comm); sv('p_tech', data.p_tech);
-    if (data.patients) {
-      Object.entries(data.patients).forEach(([k,val]) => sv(`patient_${k}`, val));
-    }
-    if (data.rows && data.rows.length > 0) {
+    sv('diveNo',data.diveNo); sv('diveDate',data.diveDate);
+    sv('treatmentTable',data.treatmentTable); sv('pressure',data.pressure);
+    sv('bottomMinutes',data.bottomMinutes);
+    sv('p_doctor',data.p_doctor); sv('p_divectr',data.p_divectr);
+    sv('p_nurse1',data.p_nurse1); sv('p_nurse2',data.p_nurse2);
+    sv('p_operator',data.p_operator); sv('p_comm',data.p_comm); sv('p_tech',data.p_tech);
+    if (data.patients) Object.entries(data.patients).forEach(([k,val]) => sv(`patient_${k}`,val));
+    if (data.rows && data.rows.length>0) {
       document.getElementById('tableBody').innerHTML = '';
       data.rows.forEach(r => addRow(r));
     }
-    sv('s_totalDive', data.s_totalDive); sv('s_bottom', data.s_bottom);
-    sv('s_patientO2', data.s_patientO2); sv('s_tender', data.s_tender);
-    sv('s_total', data.s_total); sv('remarks', data.remarks);
-    sv('sig_operator', data.sig_operator); sv('sig_nurse', data.sig_nurse);
-    showToast('📂 โหลดข้อมูลเดิม');
+    sv('s_totalDive',data.s_totalDive); sv('s_bottom',data.s_bottom);
+    sv('s_patientO2',data.s_patientO2); sv('s_tender',data.s_tender);
+    sv('s_total',data.s_total); sv('remarks',data.remarks);
+    sv('sig_operator',data.sig_operator); sv('sig_nurse',data.sig_nurse);
+    photos = data.photos || [];
+    renderPhotos();
   } catch(e) {}
 }
 
 function clearAll() {
-  if (!confirm('ล้างข้อมูลทั้งหมดในฟอร์ม?')) return;
+  if (!confirm('ล้างข้อมูลและรูปภาพทั้งหมดในฟอร์ม?')) return;
   localStorage.removeItem(STORAGE_KEY);
   location.reload();
 }
@@ -906,22 +1088,26 @@ function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2000);
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2200);
 }
 
 // ========================
-// AUTO-SAVE on input
+// AUTO-SAVE
 // ========================
-document.addEventListener('input', () => {
+document.addEventListener('input', e => {
+  if (e.target.classList.contains('photo-caption')) return; // handled by updateCaption
   clearTimeout(window._saveTimer);
   window._saveTimer = setTimeout(saveData, 1500);
 });
+
+// close lightbox on Escape
+document.addEventListener('keydown', e => { if (e.key==='Escape') closeLightbox(); });
 
 // ========================
 // INIT
 // ========================
 (function init() {
-  // Set today's date
   document.getElementById('diveDate').valueAsDate = new Date();
   renderPatientGrid();
   renderTableHeader();
@@ -929,6 +1115,5 @@ document.addEventListener('input', () => {
   loadData();
 })();
 </script>
-
 </body>
 </html>
