@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>แบบบันทึกผู้ปฏิบัติงานห้องปรับแรงดันบรรยากาศสูง</title>
+<style>
+:root {
+  --primary: #0a6cb1;
+  --primary-dark: #084d80;
+  --accent: #ff8a00;
+  --success: #1f9d55;
+  --danger: #e53e3e;
+  --text: #1a2a3a;
+  --muted: #5c6b80;
+  --border: #d0dae6;
+  --bg: #f4f7fb;
+  --card: #ffffff;
+  --section-head: #e8f0f9;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+body {
+  font-family: "Sarabun", "Tahoma", "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+
+/* ===== HEADER ===== */
+.app-header {
+  background: linear-gradient(135deg, #0a6cb1 0%, #084d80 100%);
+  color: white;
+  padding: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+}
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.header-title {
+  font-size: clamp(13px, 3vw, 16px);
+  font-weight: 700;
+  line-height: 1.3;
+  flex: 1;
+}
+.form-badge {
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.type-toggle {
+  display: flex;
+  background: rgba(255,255,255,0.15);
+  border-radius: 24px;
+  padding: 3px;
+}
+.type-btn {
+  flex: 1;
+  padding: 7px 12px;
+  border: none;
+  border-radius: 20px;
+  background: transparent;
+  color: rgba(255,255,255,0.75);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.type-btn.active {
+  background: white;
+  color: var(--primary-dark);
+}
+
+/* ===== CONTAINER ===== */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ===== CARD / SECTION ===== */
+.card {
+  background: var(--card);
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  overflow: hidden;
+}
+.section-head {
+  background: var(--section-head);
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+.section-head .chevron {
+  margin-left: auto;
+  font-size: 12px;
+  transition: transform 0.2s;
+}
+.section-head.collapsed .chevron { transform: rotate(-90deg); }
+.section-body {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.section-body.hidden { display: none; }
+
+/* ===== FORM FIELDS ===== */
+.field-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 120px;
+}
+.field-group.full { flex: 1 1 100%; }
+.field-group.half { flex: 1 1 calc(50% - 5px); }
+.field-group.third { flex: 1 1 calc(33% - 7px); }
+label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+input[type=text], input[type=time], input[type=date], input[type=number], select, textarea {
+  padding: 10px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--text);
+  background: white;
+  width: 100%;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(10,108,177,0.12);
+}
+textarea { resize: vertical; min-height: 60px; }
+
+/* ===== PATIENT LIST ===== */
+.patient-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.patient-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.patient-num {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.patient-item input {
+  flex: 1;
+  padding: 8px 10px;
+  font-size: 14px;
+}
+
+/* ===== LOG TABLE ===== */
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+  font-size: 13px;
+}
+table th {
+  background: var(--primary-dark);
+  color: white;
+  padding: 9px 6px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  border-right: 1px solid rgba(255,255,255,0.15);
+}
+table th:last-child { border-right: none; }
+table td {
+  padding: 4px 4px;
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid #eef1f5;
+  vertical-align: middle;
+}
+table td:last-child { border-right: none; }
+table tr:last-child td { border-bottom: none; }
+table tr:nth-child(even) td { background: #fafcff; }
+table td input {
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 6px 4px;
+  font-size: 13px;
+  width: 100%;
+  background: transparent;
+  min-width: 40px;
+}
+table td input:focus {
+  border-color: var(--primary);
+  background: white;
+  outline: none;
+}
+.col-time { width: 72px; }
+.col-elapsed { width: 58px; }
+.col-depth { width: 58px; }
+.col-o2 { width: 50px; }
+.col-co2 { width: 55px; }
+.col-hum { width: 50px; }
+.col-temp { width: 50px; }
+.col-detail { min-width: 140px; }
+.col-tender { width: 55px; }
+.col-patient { width: 55px; }
+.col-remark { min-width: 90px; }
+.col-air { width: 55px; }
+
+.table-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+  padding: 9px 16px;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.2s, transform 0.1s;
+  text-decoration: none;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: var(--primary); color: white; }
+.btn-secondary { background: var(--section-head); color: var(--primary-dark); border: 1.5px solid var(--border); }
+.btn-danger { background: #fff0f0; color: var(--danger); border: 1.5px solid #fcc; }
+.btn-success { background: #f0faf4; color: var(--success); border: 1.5px solid #b2dfce; }
+.btn-accent { background: var(--accent); color: white; }
+
+/* ===== SUMMARY ===== */
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.summary-item {
+  background: var(--section-head);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.summary-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.summary-val {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.summary-val input {
+  flex: 1;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: inherit;
+  background: white;
+}
+.summary-unit {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* ===== SIGNATURES ===== */
+.sig-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.sig-box {
+  flex: 1;
+  min-width: 140px;
+  border: 1.5px dashed var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sig-label {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.sig-name input {
+  text-align: center;
+  border: none;
+  border-bottom: 1.5px solid var(--border);
+  border-radius: 0;
+  font-size: 14px;
+  padding: 4px 6px;
+}
+.sig-name input:focus {
+  border-bottom-color: var(--primary);
+  box-shadow: none;
+}
+
+/* ===== PHOTO ATTACHMENT ===== */
+.photo-upload-btns {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+}
+.photo-item {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1.5px solid var(--border);
+  background: #f8f9fa;
+  display: flex;
+  flex-direction: column;
+}
+.photo-item img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  display: block;
+  cursor: pointer;
+}
+.photo-caption {
+  padding: 5px 7px;
+  font-size: 12px;
+  border: none;
+  border-top: 1px solid var(--border);
+  width: 100%;
+  background: white;
+  font-family: inherit;
+  color: var(--text);
+  min-height: 28px;
+}
+.photo-caption:focus {
+  outline: none;
+  background: #f0f6ff;
+}
+.photo-del {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(229,62,62,0.88);
+  color: white;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  line-height: 1;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.photo-del:active { transform: scale(0.92); }
+.photo-num {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  background: rgba(0,0,0,0.55);
+  color: white;
+  border-radius: 5px;
+  padding: 1px 6px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.photo-empty {
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  padding: 28px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.photo-empty-icon { font-size: 36px; opacity: 0.4; }
+.photo-count-badge {
+  background: var(--primary);
+  color: white;
+  border-radius: 20px;
+  padding: 1px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  display: none;
+}
+.photo-count-badge.show { display: inline-block; }
+
+/* Lightbox */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 300;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+.lightbox.show { display: flex; }
+.lightbox img {
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: 10px;
+  object-fit: contain;
+}
+.lightbox-caption {
+  color: rgba(255,255,255,0.85);
+  font-size: 14px;
+  text-align: center;
+  max-width: 400px;
+}
+.lightbox-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: white;
+  font-size: 22px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== BOTTOM ACTION BAR ===== */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid var(--border);
+  padding: 10px 16px;
+  display: flex;
+  gap: 10px;
+  z-index: 100;
+  box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
+}
+.bottom-bar .btn { flex: 1; justify-content: center; padding: 12px; font-size: 14px; }
+
+/* ===== TOAST ===== */
+.toast {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px);
+  background: #1a2a3a;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 200;
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ===== PRINT ===== */
+@media print {
+  .app-header, .bottom-bar, .table-actions, .btn,
+  .photo-del, .lightbox, .photo-upload-btns { display: none !important; }
+  body { background: white; padding: 0; }
+  .container { padding: 0; max-width: 100%; }
+  .card { box-shadow: none; border: 1px solid #ccc; border-radius: 0; margin-bottom: 8px; }
+  .section-body.hidden { display: flex !important; }
+  .table-wrapper { overflow: visible; }
+  table { min-width: unset; }
+  input, textarea, select { border: none !important; box-shadow: none !important; }
+  .print-title { display: block !important; text-align: center; font-size: 14pt; font-weight: bold; margin-bottom: 8px; }
+  .photo-grid { grid-template-columns: repeat(3, 1fr); }
+  .photo-caption { border-top: 1px solid #ccc; }
+  @page { margin: 15mm; }
+}
+.print-title { display: none; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 480px) {
+  .patient-grid { grid-template-columns: 1fr; }
+  .summary-grid { grid-template-columns: 1fr; }
+  .sig-row { flex-direction: column; }
+  .field-group.third { flex: 1 1 calc(50% - 5px); }
+  .photo-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+}
+@media (min-width: 700px) {
+  .container { padding: 20px 20px; }
+  table { font-size: 14px; }
+  table th { font-size: 12px; padding: 10px 8px; }
+}
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="header-top">
+    <div class="header-title">แบบบันทึกผู้ปฏิบัติงาน<br>ห้องปรับแรงดันบรรยากาศสูง</div>
+    <span class="form-badge" id="formBadge">FM-UAM-HBC-01</span>
+  </div>
+  <div class="type-toggle">
+    <button class="type-btn active" onclick="setType('multi')">Multiplace (หลายตอน)</button>
+    <button class="type-btn" onclick="setType('mono')">Monoplace (ตอนเดียว)</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightboxImg" src="" alt="">
+  <div class="lightbox-caption" id="lightboxCaption"></div>
+</div>
+
+<div class="container">
+
+  <div class="print-title" id="printTitle">แบบบันทึกผู้ปฏิบัติงานห้องปรับแรงดันบรรยากาศสูง ชนิดหลายตอน — FM-UAM-HBC-01</div>
+
+  <!-- SECTION 1: General Info -->
+  <div class="card">
+    <div class="section-head" onclick="toggleSection(this)">📋 ข้อมูลทั่วไป<span class="chevron">▼</span></div>
+    <div class="section-body">
+      <div class="field-row">
+        <div class="field-group third">
+          <label>Dive No.</label>
+          <input type="text" id="diveNo" placeholder="เช่น 001/68">
+        </div>
+        <div class="field-group third">
+          <label>วันที่</label>
+          <input type="date" id="diveDate">
+        </div>
+        <div class="field-group third">
+          <label>ตารางการรักษา</label>
+          <select id="treatmentTable">
+            <option value="">-- เลือก --</option>
+            <option>Table 9</option>
+            <option>Table 61</option>
+            <option>Table 62</option>
+            <option>Table 64</option>
+            <option>Table 65</option>
+            <option>USNTABLE 6</option>
+            <option>USNTABLE 5</option>
+            <option>Monoplace 2.4 ATA</option>
+            <option>Monoplace 2.0 ATA</option>
+            <option>อื่นๆ</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field-group half">
+          <label>ความดัน (ATA)</label>
+          <input type="number" id="pressure" step="0.1" min="1" max="6" placeholder="เช่น 2.4">
+        </div>
+        <div class="field-group half">
+          <label>ระยะเวลา Bottom (นาที)</label>
+          <input type="number" id="bottomMinutes" placeholder="เช่น 90">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: Personnel -->
+  <div class="card">
+    <div class="section-head" onclick="toggleSection(this)">👨‍⚕️ เจ้าหน้าที่ผู้ปฏิบัติงาน<span class="chevron">▼</span></div>
+    <div class="section-body">
+      <div class="field-row">
+        <div class="field-group half">
+          <label>แพทย์เวชศาสตร์ใต้น้ำ</label>
+          <input type="text" id="p_doctor" placeholder="ชื่อ-นามสกุล">
+        </div>
+        <div class="field-group half">
+          <label>พยาบาลผู้ควบคุมการดำ</label>
+          <input type="text" id="p_divectr" placeholder="ชื่อ-นามสกุล">
+        </div>
+      </div>
+      <div class="field-row multiplace-field">
+        <div class="field-group half">
+          <label>พยาบาลพี่เลี้ยง 1</label>
+          <input type="text" id="p_nurse1" placeholder="ชื่อ-นามสกุล">
+        </div>
+        <div class="field-group half">
+          <label>พยาบาลพี่เลี้ยง 2</label>
+          <input type="text" id="p_nurse2" placeholder="ชื่อ-นามสกุล">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field-group half">
+          <label>เจ้าหน้าที่ควบคุมเครื่อง</label>
+          <input type="text" id="p_operator" placeholder="ชื่อ-นามสกุล">
+        </div>
+        <div class="field-group half multiplace-field">
+          <label>เจ้าหน้าที่สื่อสาร</label>
+          <input type="text" id="p_comm" placeholder="ชื่อ-นามสกุล">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field-group half">
+          <label>เจ้าหน้าที่ช่างเทคนิค</label>
+          <input type="text" id="p_tech" placeholder="ชื่อ-นามสกุล">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: Patient List -->
+  <div class="card">
+    <div class="section-head" onclick="toggleSection(this)">🏥 รายชื่อผู้ป่วย<span class="chevron">▼</span></div>
+    <div class="section-body">
+      <div class="patient-grid" id="patientGrid"></div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: Operation Log -->
+  <div class="card">
+    <div class="section-head" onclick="toggleSection(this)">📊 บันทึกการปฏิบัติ<span class="chevron">▼</span></div>
+    <div class="section-body" style="padding:10px">
+      <div class="table-wrapper">
+        <table id="logTable">
+          <thead><tr id="tableHead"></tr></thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+      <div class="table-actions">
+        <button class="btn btn-primary" onclick="addRow()">+ เพิ่มแถว</button>
+        <button class="btn btn-danger" onclick="removeLastRow()">− ลบแถวสุดท้าย</button>
+        <button class="btn btn-secondary" onclick="clearTable()">🗑 ล้างตาราง</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: Summary -->
+  <div class="card">
+    <div class="section-head" onclick="toggleSection(this)">⏱ สรุปเวลา<span class="chevron">▼</span></div>
+    <div class="section-body">
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="summary-label">Total time of dive</div>
+          <div class="summary-val"><input type="number" id="s_totalDive" placeholder="0"><span class="summary-unit">mins</span></div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">Bottom time</div>
+          <div class="summary-val"><input type="number" id="s_bottom" placeholder="0"><span class="summary-unit">mins</span></div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">Total Patient O2</div>
+          <div class="summary-val"><input type="number" id="s_patientO2" placeholder="0"><span class="summary-unit">mins</span></div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label" id="s_tenderLabel">Total Tender O2</div>
+          <div class="summary-val"><input type="number" id="s_tender" placeholder="0"><span class="summary-unit">mins</span></div>
+        </div>
+        <div class="summary-item" style="grid-column: 1 / -1">
+          <div class="summary-label">เวลารวมทั้งหมด</div>
+          <div class="summary-val"><input type="number" id="s_total" placeholder="0"><span class="summary-unit">mins</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: Remarks -->
+  <div class="card">
+    <div class="section-head" onclick="toggleSection(this)">📝 หมายเหตุ / เหตุการณ์พิเศษ<span class="chevron">▼</span></div>
+    <div class="section-body">
+      <textarea id="remarks" rows="4" placeholder="บันทึกเหตุการณ์พิเศษ อาการผิดปกติ หรือข้อสังเกตอื่นๆ..."></textarea>
+    </div>
+  </div>
+
+  <!-- SECTION 7: Photo Attachment -->
+  <div class="card">
+    <div class="section-head" onclick="toggleSection(this)">
+      📷 รูปภาพแนบ
+      <span class="photo-count-badge" id="photoCountBadge"></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="photo-upload-btns">
+        <label class="btn btn-primary" for="cameraInput">📷 ถ่ายรูป</label>
+        <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none" onchange="handlePhotoInput(this)">
+        <label class="btn btn-secondary" for="galleryInput">🖼 เลือกจากคลัง</label>
+        <input type="file" id="galleryInput" accept="image/*" multiple style="display:none" onchange="handlePhotoInput(this)">
+      </div>
+      <div class="photo-grid" id="photoGrid"></div>
+      <div class="photo-empty" id="photoEmpty">
+        <span class="photo-empty-icon">📷</span>
+        ยังไม่มีรูปภาพ — กดถ่ายรูปหรือเลือกจากคลัง
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 8: Signatures -->
+  <div class="card">
+    <div class="section-head" onclick="toggleSection(this)">✍️ ลงนาม<span class="chevron">▼</span></div>
+    <div class="section-body">
+      <div class="sig-row">
+        <div class="sig-box">
+          <div class="sig-label">เจ้าหน้าที่ควบคุมเครื่อง</div>
+          <div class="sig-name"><input type="text" id="sig_operator" placeholder="ชื่อ-นามสกุล"></div>
+          <div class="sig-label" style="margin-top:4px">ลงนาม _______________</div>
+        </div>
+        <div class="sig-box">
+          <div class="sig-label">พยาบาลผู้ควบคุมการดำ</div>
+          <div class="sig-name"><input type="text" id="sig_nurse" placeholder="ชื่อ-นามสกุล"></div>
+          <div class="sig-label" style="margin-top:4px">ลงนาม _______________</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end container -->
+
+<div class="bottom-bar">
+  <button class="btn btn-secondary" onclick="saveData()">💾 บันทึก</button>
+  <button class="btn btn-accent" onclick="window.print()">🖨 พิมพ์</button>
+  <button class="btn btn-danger" onclick="clearAll()">🗑 ล้างทั้งหมด</button>
+</div>
+
+<script>
+// ========================
+// STATE
+// ========================
+let chamberType = 'multi';
+let photos = []; // [{id, dataUrl, caption}]
+const STORAGE_KEY = 'hbo_op_note';
+
+// ========================
+// COLUMNS
+// ========================
+const COL_MULTI = [
+  { id:'time',    label:'เวลา',                   cls:'col-time',    type:'time' },
+  { id:'elapsed', label:'Elapsed\n(mins)',         cls:'col-elapsed', type:'number' },
+  { id:'depth',   label:'Depth\nFSW',             cls:'col-depth',   type:'number' },
+  { id:'o2',      label:'O2\n%',                  cls:'col-o2',      type:'number' },
+  { id:'co2',     label:'CO2\nppm',               cls:'col-co2',     type:'number' },
+  { id:'hum',     label:'Humidity\nRH%',          cls:'col-hum',     type:'number' },
+  { id:'temp',    label:'Temp\n°C',               cls:'col-temp',    type:'number' },
+  { id:'detail',  label:'รายละเอียดการปฏิบัติ',  cls:'col-detail',  type:'text' },
+  { id:'tender',  label:'Tender\nO2',             cls:'col-tender',  type:'number' },
+  { id:'patient', label:'Patient\nO2',            cls:'col-patient', type:'number' },
+  { id:'remark',  label:'หมายเหตุ',               cls:'col-remark',  type:'text' },
+];
+const COL_MONO = [
+  { id:'time',    label:'เวลา',                   cls:'col-time',    type:'time' },
+  { id:'elapsed', label:'Elapsed\n(mins)',         cls:'col-elapsed', type:'number' },
+  { id:'depth',   label:'Depth\nFSW',             cls:'col-depth',   type:'number' },
+  { id:'detail',  label:'รายละเอียดการปฏิบัติ',  cls:'col-detail',  type:'text' },
+  { id:'air',     label:'Patient\nAir',           cls:'col-air',     type:'number' },
+  { id:'patient', label:'Patient\nO2',            cls:'col-patient', type:'number' },
+  { id:'remark',  label:'หมายเหตุ',               cls:'col-remark',  type:'text' },
+];
+function getCols() { return chamberType === 'multi' ? COL_MULTI : COL_MONO; }
+
+// ========================
+// TYPE TOGGLE
+// ========================
+function setType(type) {
+  chamberType = type;
+  document.querySelectorAll('.type-btn').forEach((b, i) =>
+    b.classList.toggle('active', (i===0&&type==='multi')||(i===1&&type==='mono')));
+  const badge = type==='multi' ? 'FM-UAM-HBC-01' : 'FM-UAM-HBC-04';
+  const label = type==='multi' ? 'ชนิดหลายตอน' : 'ชนิดตอนเดียว';
+  document.getElementById('formBadge').textContent = badge;
+  document.getElementById('printTitle').textContent =
+    `แบบบันทึกผู้ปฏิบัติงานห้องปรับแรงดันบรรยากาศสูง ${label} — ${badge}`;
+  document.querySelectorAll('.multiplace-field').forEach(el =>
+    el.style.display = type==='multi' ? '' : 'none');
+  document.getElementById('s_tenderLabel').textContent =
+    type==='multi' ? 'Total Tender O2' : 'Total Patient Air';
+  renderPatientGrid();
+  renderTableHeader();
+  clearTable();
+}
+
+// ========================
+// PATIENT GRID
+// ========================
+function renderPatientGrid() {
+  const grid = document.getElementById('patientGrid');
+  const count = chamberType==='multi' ? 12 : 2;
+  grid.innerHTML = '';
+  for (let i=1; i<=count; i++) {
+    grid.innerHTML += `
+      <div class="patient-item">
+        <div class="patient-num">${i}</div>
+        <input type="text" id="patient_${i}" placeholder="ชื่อ-นามสกุล ผู้ป่วย">
+      </div>`;
+  }
+}
+
+// ========================
+// TABLE
+// ========================
+function renderTableHeader() {
+  document.getElementById('tableHead').innerHTML = getCols()
+    .map(c => `<th class="${c.cls}">${c.label.replace('\\n','<br>')}</th>`).join('');
+}
+function addRow(data) {
+  const cols = getCols();
+  const row = document.createElement('tr');
+  row.innerHTML = cols.map(c => {
+    const val = data ? (data[c.id]||'') : '';
+    return `<td class="${c.cls}"><input type="${c.type}" value="${val}" placeholder="${c.type==='text'?'...':''}"></td>`;
+  }).join('');
+  document.getElementById('tableBody').appendChild(row);
+}
+function removeLastRow() {
+  const b = document.getElementById('tableBody');
+  if (b.lastChild) b.removeChild(b.lastChild);
+}
+function clearTable() {
+  document.getElementById('tableBody').innerHTML = '';
+  const n = chamberType==='multi' ? 12 : 8;
+  for (let i=0; i<n; i++) addRow();
+}
+
+// ========================
+// SECTION TOGGLE
+// ========================
+function toggleSection(head) {
+  const body = head.nextElementSibling;
+  const hidden = body.classList.contains('hidden');
+  body.classList.toggle('hidden', !hidden);
+  head.classList.toggle('collapsed', !hidden);
+}
+
+// ========================
+// PHOTO MANAGEMENT
+// ========================
+function handlePhotoInput(input) {
+  const files = Array.from(input.files);
+  if (!files.length) return;
+  showToast('⏳ กำลังประมวลผลรูป...');
+  Promise.all(files.map(compressImage)).then(results => {
+    results.forEach(dataUrl => {
+      photos.push({ id: Date.now() + '_' + Math.random().toString(36).slice(2), dataUrl, caption: '' });
+    });
+    renderPhotos();
+    saveData();
+    showToast(`📷 เพิ่มรูป ${results.length} รูป`);
+  });
+  input.value = '';
+}
+
+function compressImage(file) {
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const MAX = 1400;
+        let w = img.width, h = img.height;
+        if (w > MAX || h > MAX) {
+          if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+          else { w = Math.round(w * MAX / h); h = MAX; }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', 0.78));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderPhotos() {
+  const grid = document.getElementById('photoGrid');
+  const empty = document.getElementById('photoEmpty');
+  const badge = document.getElementById('photoCountBadge');
+  grid.innerHTML = '';
+  if (photos.length === 0) {
+    empty.style.display = '';
+    badge.classList.remove('show');
+    return;
+  }
+  empty.style.display = 'none';
+  badge.textContent = photos.length;
+  badge.classList.add('show');
+  photos.forEach((p, idx) => {
+    const div = document.createElement('div');
+    div.className = 'photo-item';
+    div.innerHTML = `
+      <img src="${p.dataUrl}" alt="รูปที่ ${idx+1}" loading="lazy"
+           onclick="openLightbox('${p.id}')" title="คลิกเพื่อขยาย">
+      <span class="photo-num">${idx+1}</span>
+      <button class="photo-del" onclick="deletePhoto('${p.id}')" title="ลบรูป">✕</button>
+      <input class="photo-caption" type="text" value="${escHtml(p.caption)}"
+             placeholder="คำบรรยาย..."
+             oninput="updateCaption('${p.id}', this.value)">`;
+    grid.appendChild(div);
+  });
+}
+
+function deletePhoto(id) {
+  photos = photos.filter(p => p.id !== id);
+  renderPhotos();
+  saveData();
+  showToast('🗑 ลบรูปแล้ว');
+}
+
+function updateCaption(id, val) {
+  const p = photos.find(p => p.id === id);
+  if (p) p.caption = val;
+  clearTimeout(window._saveTimer);
+  window._saveTimer = setTimeout(saveData, 1500);
+}
+
+function openLightbox(id) {
+  const p = photos.find(p => p.id === id);
+  if (!p) return;
+  document.getElementById('lightboxImg').src = p.dataUrl;
+  document.getElementById('lightboxCaption').textContent = p.caption || '';
+  document.getElementById('lightbox').classList.add('show');
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('show');
+}
+
+function escHtml(s) {
+  return String(s).replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// ========================
+// SAVE / LOAD
+// ========================
+function collectData() {
+  const cols = getCols();
+  const rows = [];
+  document.querySelectorAll('#tableBody tr').forEach(tr => {
+    const row = {};
+    tr.querySelectorAll('td input').forEach((inp, i) => { row[cols[i].id] = inp.value; });
+    rows.push(row);
+  });
+  const patients = {};
+  const count = chamberType==='multi' ? 12 : 2;
+  for (let i=1; i<=count; i++) {
+    const el = document.getElementById(`patient_${i}`);
+    if (el) patients[i] = el.value;
+  }
+  return {
+    type: chamberType,
+    diveNo: v('diveNo'), diveDate: v('diveDate'),
+    treatmentTable: v('treatmentTable'), pressure: v('pressure'), bottomMinutes: v('bottomMinutes'),
+    p_doctor: v('p_doctor'), p_divectr: v('p_divectr'),
+    p_nurse1: v('p_nurse1'), p_nurse2: v('p_nurse2'),
+    p_operator: v('p_operator'), p_comm: v('p_comm'), p_tech: v('p_tech'),
+    patients, rows,
+    s_totalDive: v('s_totalDive'), s_bottom: v('s_bottom'),
+    s_patientO2: v('s_patientO2'), s_tender: v('s_tender'), s_total: v('s_total'),
+    remarks: v('remarks'),
+    sig_operator: v('sig_operator'), sig_nurse: v('sig_nurse'),
+    photos: photos.map(p => ({ id: p.id, dataUrl: p.dataUrl, caption: p.caption })),
+  };
+}
+
+function v(id) { const el = document.getElementById(id); return el ? el.value : ''; }
+function sv(id, val) { const el = document.getElementById(id); if (el) el.value = val||''; }
+
+function saveData() {
+  const data = collectData();
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    showToast('💾 บันทึกสำเร็จ');
+  } catch(e) {
+    showToast('⚠️ พื้นที่จัดเก็บเต็ม — ลบรูปบางรูปก่อน');
+  }
+}
+
+function loadData() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return;
+  try {
+    const data = JSON.parse(raw);
+    if (data.type) setType(data.type);
+    sv('diveNo',data.diveNo); sv('diveDate',data.diveDate);
+    sv('treatmentTable',data.treatmentTable); sv('pressure',data.pressure);
+    sv('bottomMinutes',data.bottomMinutes);
+    sv('p_doctor',data.p_doctor); sv('p_divectr',data.p_divectr);
+    sv('p_nurse1',data.p_nurse1); sv('p_nurse2',data.p_nurse2);
+    sv('p_operator',data.p_operator); sv('p_comm',data.p_comm); sv('p_tech',data.p_tech);
+    if (data.patients) Object.entries(data.patients).forEach(([k,val]) => sv(`patient_${k}`,val));
+    if (data.rows && data.rows.length>0) {
+      document.getElementById('tableBody').innerHTML = '';
+      data.rows.forEach(r => addRow(r));
+    }
+    sv('s_totalDive',data.s_totalDive); sv('s_bottom',data.s_bottom);
+    sv('s_patientO2',data.s_patientO2); sv('s_tender',data.s_tender);
+    sv('s_total',data.s_total); sv('remarks',data.remarks);
+    sv('sig_operator',data.sig_operator); sv('sig_nurse',data.sig_nurse);
+    photos = data.photos || [];
+    renderPhotos();
+  } catch(e) {}
+}
+
+function clearAll() {
+  if (!confirm('ล้างข้อมูลและรูปภาพทั้งหมดในฟอร์ม?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
+}
+
+// ========================
+// TOAST
+// ========================
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ========================
+// AUTO-SAVE
+// ========================
+document.addEventListener('input', e => {
+  if (e.target.classList.contains('photo-caption')) return; // handled by updateCaption
+  clearTimeout(window._saveTimer);
+  window._saveTimer = setTimeout(saveData, 1500);
+});
+
+// close lightbox on Escape
+document.addEventListener('keydown', e => { if (e.key==='Escape') closeLightbox(); });
+
+// ========================
+// INIT
+// ========================
+(function init() {
+  document.getElementById('diveDate').valueAsDate = new Date();
+  renderPatientGrid();
+  renderTableHeader();
+  clearTable();
+  loadData();
+})();
+</script>
+</body>
+</html>
